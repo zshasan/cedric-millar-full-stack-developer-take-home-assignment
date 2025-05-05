@@ -2,78 +2,60 @@
 import Image from "next/image";
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
+import { Box, FormControl, InputLabel, Select, MenuItem, Button, Container, Typography } from '@mui/material';
+import { Shipment } from '../types';
 import axios from 'axios';
 import styles from "./dashboard.module.css";
+import EditViewModal from "../editviewmodal/editviewmodal";
+import Dashboard from "./dashboard";
 
-const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  { field: 'origin', headerName: 'Origin', width: 150 },
-  { field: 'destination', headerName: 'Destination', width: 150 },
-  { field: 'carrier', headerName: 'Carrier', width: 150 },
-  { field: 'shipDate', headerName: 'Ship Date', width: 150 },
-  { field: 'eta', headerName: 'ETA', width: 150 },
-  { field: 'status', headerName: 'Status', width: 120 },
-];
-
-export default function ShipmentDashboard() {
-
-  const [shipments, setShipments] = useState([]);
-  const [statusFilter, setStatusFilter] = useState('');
-  const [carrierFilter, setCarrierFilter] = useState('');
+export default function HomePage() {
+  const [shipments, setShipments] = useState<Shipment[]>([]);
+  const [selectedShipment, setSelectedShipment] = useState<Shipment | null>(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    axios.get('/api/shipments').then((res) => setShipments(res.data));
+    fetchShipments();
   }, []);
 
-  const filteredData = shipments.filter(
-    (s: any) =>
-      (!statusFilter || s.status === statusFilter) &&
-      (!carrierFilter || s.carrier === carrierFilter)
-  );
+  const fetchShipments = () => {
+    axios.get('/api/shipments').then((res) => setShipments(res.data));
+  };
 
-  return (
-    <div className={styles.page}>
-      <a href = "/">
-        <Image
-            className={styles.logo}
-            src="/Cedric Millar Logo.png"
-            alt="Next.js logo"
-            width={180}
-            height={180}
-            priority
-        />
-      </a>
-      <main className={styles.main}>
-      <Box>
-        <Box display="flex" gap={2} mb={2}>
-          <FormControl size="small">
-            <InputLabel>Status</InputLabel>
-            <Select value={statusFilter} label="Status" onChange={(e) => setStatusFilter(e.target.value)}>
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="In Transit">In Transit</MenuItem>
-              <MenuItem value="Delivered">Delivered</MenuItem>
-              <MenuItem value="Delayed">Delayed</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl size="small">
-            <InputLabel>Carrier</InputLabel>
-            <Select value={carrierFilter} label="Carrier" onChange={(e) => setCarrierFilter(e.target.value)}>
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="FedEx">FedEx</MenuItem>
-              <MenuItem value="UPS">UPS</MenuItem>
-              <MenuItem value="DHL">DHL</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <DataGrid rows={filteredData} columns={columns} pageSize={5} rowsPerPageOptions={[5]}/>
-        </div>
-      </Box>
+  const handleRowClick = (shipment: Shipment) => {
+    setSelectedShipment(shipment);
+    setOpen(true);
+  };
 
-      <Link href="/addshipment"><Button type="button" variant="contained">Add Shipment</Button></Link>
-      </main>
-    </div>
+  const handleStatusUpdate = async (id: number, status: string) => {
+    await axios.put(`/api/shipments/${id}/status`, { status });
+    setOpen(false);
+    fetchShipments();
+  };
+
+  return (    
+    <div className={styles.page}> 
+    <a href = "/">
+            <Image
+              className={styles.logo}
+              src="/Cedric Millar Logo.png"
+              alt="Next.js logo"
+              width={180}
+              height={180}
+              priority
+            />
+    </a>
+      <Container>
+      <Typography variant="h4" gutterBottom>Shipment Dashboard</Typography>
+      <Dashboard shipments={shipments} onRowClick={handleRowClick} />
+      <EditViewModal
+        open={open}
+        shipment={selectedShipment}
+        onClose={() => setOpen(false)}
+        onUpdateStatus={handleStatusUpdate}
+      />      
+    </Container> 
+    <Link href="/addshipment"><Button type="button" variant="contained">Add Shipment</Button></Link>
+    </div>  
   );
-}   
+}  

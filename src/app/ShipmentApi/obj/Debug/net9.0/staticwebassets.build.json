@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "hIG+BlMQ/IPfT1eXN1bf26TG+k8oGbXX4p5F4qDPiaA=",
+  "Source": "ShipmentApi",
+  "BasePath": "_content/ShipmentApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
