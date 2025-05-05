@@ -5,6 +5,8 @@ using ShipmentApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("ShipmentsDb"));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

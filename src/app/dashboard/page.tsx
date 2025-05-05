@@ -46,7 +46,7 @@ export default function HomePage() {
             />
     </a>
       <Container>
-      <Typography variant="h4" gutterBottom>Shipment Dashboard</Typography>
+      <Typography color="black" variant="h4" gutterBottom>Shipment Dashboard</Typography>
       <Dashboard shipments={shipments} onRowClick={handleRowClick} />
       <EditViewModal
         open={open}
@@ -55,7 +55,12 @@ export default function HomePage() {
         onUpdateStatus={handleStatusUpdate}
       />      
     </Container> 
-    <Link href="/addshipment"><Button type="button" variant="contained">Add Shipment</Button></Link>
+    <Link href="/addshipment"><Button color="success" type="button" variant="contained">Add Shipment</Button></Link>    
+    <footer>
+      <Typography color="black" className="font-normal">
+        &copy; Zaheer Hasan
+      </Typography>
+    </footer>
     </div>  
   );
 }  

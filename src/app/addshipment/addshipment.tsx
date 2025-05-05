@@ -1,6 +1,10 @@
 'use client'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Carrier } from '../types';
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
 
 interface Props {
@@ -13,8 +17,10 @@ export default function AddShipmentForm({ carriers, onSubmit }: Props) {
     origin: '',
     destination: '',
     carrier: '',
-    shipDate: '',
-    eta: '',
+    shipDate: dayjs<Dayjs>(),
+    eta: dayjs<Dayjs>(),
+    // shipDate: '',
+    // eta: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }>) => {
@@ -22,9 +28,23 @@ export default function AddShipmentForm({ carriers, onSubmit }: Props) {
     setFormData((prev) => ({ ...prev, [name as string]: value }));
   };
 
+  const handleDateChange = (name: 'shipDate' | 'eta', value: Dayjs | null) => {
+    if (value) {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ ...formData, status: 'Pending' });
+    onSubmit({
+      origin: formData.origin,
+      destination: formData.destination,
+      carrier: formData.carrier,
+      shipDate: formData.shipDate.format('YYYY-MM-DD'),
+      eta: formData.eta.format('YYYY-MM-DD'),
+      status: 'Pending', 
+      // ...formData, status: 'Pending' 
+    });
   };
 
   return (
@@ -41,15 +61,13 @@ export default function AddShipmentForm({ carriers, onSubmit }: Props) {
           ))}
         </Select>
       </FormControl>
-      <TextField name="shipDate" label="Ship Date" type="date" InputLabelProps={{ shrink: true }} value={formData.shipDate} onChange={handleChange} required />
-      <TextField name="eta" label="ETA" type="date" InputLabelProps={{ shrink: true }} value={formData.eta} onChange={handleChange} required />
-      <Button variant="contained" color="primary" type="submit">Add Shipment</Button>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker label="Ship Date" value={formData.shipDate} onChange={(date) => handleDateChange('shipDate', date)}/>
+        <DatePicker label="ETA" value={formData.eta} onChange={(date) => handleDateChange('eta', date)}/>
+      </LocalizationProvider>
+      {/* <TextField name="shipDate" label="Ship Date" type="date" InputLabelProps={{ shrink: true }} value={formData.shipDate} onChange={handleChange} required />
+      <TextField name="eta" label="ETA" type="date" InputLabelProps={{ shrink: true }} value={formData.eta} onChange={handleChange} required /> */}
+      <Button variant="contained" color="success" type="submit">Add Shipment</Button>
     </Box>
   );
 }
-/*
-<LocalizationProvider dateAdapter={AdapterDayjs}>
-//                     <DatePicker label="Ship Date" value={formData.shipDate} onChange={(date) => setFormData({ ...formData, shipDate: date })} />
-//                     <DatePicker label="ETA" value={formData.eta} onChange={(date) => setFormData({ ...formData, eta: date })} />
-//                 </LocalizationProvider>
-*/ 

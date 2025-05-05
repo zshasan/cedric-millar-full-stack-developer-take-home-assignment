@@ -2,7 +2,29 @@ This is a Full-Stack project (Frontend: [Next.js](https://nextjs.org) and Backen
 
 ## Getting Started
 
-First, run the development server(for the frontend):
+First, make sure all necessry packages on you local machine:
+
+```bash
+dotnet add package Microsoft.EntityFrameworkCore.InMemory
+dotnet add package Swashbuckle.AspNetCore
+
+npm install -g npm
+
+# Verify npm version:
+npm -v # Should print "10.9.2".
+
+# Download and install fnm:
+winget install Schniz.fnm
+
+# Download and install Node.js:
+fnm install 22
+
+# Verify the Node.js version:
+node -v # Should print "v22.15.0".
+
+```
+
+Then, run the development server (for the frontend):
 
 ```bash
 npm run dev
@@ -31,3 +53,9 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Design Choices
+- This was meant to be simple Shipment Dashboard with three pages (Home, Dashboard, Add Shipment).
+- Uses an In-Memory database vs SQLite
+- Navigation available between pages
+- Axios used over SWR for connection between both ends since for fetching it would be required for functionality
+- MaterialUI was the main React library of choice
