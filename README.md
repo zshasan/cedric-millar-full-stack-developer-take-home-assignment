@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a Full-Stack project (Frontend: [Next.js](https://nextjs.org) and Backend: ASP.NET Core) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) and `dotnet new webapi -n ShipmentApi`.
 
 ## Getting Started
 
