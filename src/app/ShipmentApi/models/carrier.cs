@@ -1,3 +1,5 @@
+// This defines what a Carrier is, a company with unique ID and Name
+
 namespace ShipmentApi.Models;
 
 public class Carrier

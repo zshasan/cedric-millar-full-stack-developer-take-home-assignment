@@ -1,20 +1,29 @@
+// EntityFrameworkCore: for in-memory database support.
 using Microsoft.EntityFrameworkCore;
+// ShipmentApi.Data: includes AppDbContext (EF Core context).
 using ShipmentApi.Data;
+//includes Shipment and Carrier classes.
 using ShipmentApi.Models;
 
+// Initializes the app’s builder (dependency injection container, configuration, logging, etc.).
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
+// Clears default logging providers and adds console logging (for terminal/debug output).
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+// Registers database to use In-Memory database
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("ShipmentsDb"));
+// Enables Swagger API docs and standard controller support.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+// Builds the app
 var app = builder.Build();
 
-// Seed data
+// Seed sample data and list of carriers
+// Creates a scope to access services like AppDbContext outside of a request context.
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -44,6 +53,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
+// sets up route matching for [ApiController] routes.
 app.MapControllers();
 app.Run();
+// Starts up REST endpoints based on your controllers

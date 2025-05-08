@@ -13,27 +13,32 @@ interface Props {
 }
 
 export default function AddShipmentForm({ carriers, onSubmit }: Props) {
+  // initializes form and values
   const [formData, setFormData] = useState({
     origin: '',
     destination: '',
     carrier: '',
+    // default to todays date
     shipDate: dayjs<Dayjs>(),
     eta: dayjs<Dayjs>(),
     // shipDate: '',
     // eta: '',
   });
 
+  // handles updates for origin, destination and carrier
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name as string]: value }));
   };
 
+  // handles updates for both date fields
   const handleDateChange = (name: 'shipDate' | 'eta', value: Dayjs | null) => {
     if (value) {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
+  // handles submission of form with status kept as Pending
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({

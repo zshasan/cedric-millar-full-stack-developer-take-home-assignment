@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+// includes AppDbContext (EF Core context).
 using ShipmentApi.Data;
+//includes Shipment and Carrier classes.
 using ShipmentApi.Models;
 
 namespace ShipmentApi.Controllers;
@@ -19,6 +21,7 @@ public class ShipmentsController : ControllerBase
         _logger = logger;
     }
 
+    // GET /api/shipments – List all shipments (with filter by status, carrier) Endpoint
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] string? status, [FromQuery] string? carrier)
     {
@@ -34,6 +37,7 @@ public class ShipmentsController : ControllerBase
         return Ok(await query.ToListAsync());
     }
 
+    // POST /api/shipments – Add new shipment Endpoint
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] Shipment shipment)
     {
@@ -43,23 +47,25 @@ public class ShipmentsController : ControllerBase
         return Ok(shipment);
     }
 
+    //PUT /api/shipments/{id}/status – Update shipment status Endpoint
     [HttpPut("{id}/status")]
     public IActionResult UpdateShipmentStatus(int id, [FromBody] StatusUpdateDto statusUpdate)
-{
-    var shipment = _context.Shipments.FirstOrDefault(s => s.Id == id);
-    if (shipment == null)
     {
-        _logger.LogWarning("Attempted to update non-existent shipment ID {ShipmentId}", id);
-        return NotFound();
+        var shipment = _context.Shipments.FirstOrDefault(s => s.Id == id);
+        if (shipment == null)
+        {
+            _logger.LogWarning("Attempted to update non-existent shipment ID {ShipmentId}", id);
+            return NotFound();
+        }
+
+        shipment.Status = statusUpdate.Status;
+        _context.SaveChanges();
+        _logger.LogInformation("Updated status for shipment ID {ShipmentId} to {Status}", id, shipment.Status);
+
+        return NoContent();
     }
 
-    shipment.Status = statusUpdate.Status;
-    _context.SaveChanges();
-    _logger.LogInformation("Updated status for shipment ID {ShipmentId} to {Status}", id, shipment.Status);
-
-    return NoContent();
-}
-
+    // Simple object to hold the status field from the PUT request body.
     public class StatusUpdateDto
     {
         public string Status { get; set; }

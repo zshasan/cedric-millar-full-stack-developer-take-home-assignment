@@ -1,4 +1,3 @@
-
 // components/ShipmentStatusModal.tsx
 import { Modal, Box, Typography, Button, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { Shipment } from '../types';
@@ -7,46 +6,41 @@ import axios from 'axios';
 import styles from "./editviewmodal.module.css";
 
 interface Props {
+  // whether the modal is currently visible
   open: boolean;
+  // shipment object
   shipment: Shipment | null;
+  // called when closing modal
   onClose: () => void;
+  // updates status of shipment in parent
   onUpdateStatus: (id: number, status: string) => void;
 }
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  borderRadius: 2,
-  p: 4,
-};
 
 const statuses = ['Pending', 'In Transit', 'Delivered', 'Delayed'];
 
 export default function EditViewModal({ open, shipment, onClose, onUpdateStatus }: Props) {
   const [status, setStatus] = useState('');
 
+  // matches default modal status to shipments current status
   useEffect(() => {
     if (shipment) {
       setStatus(shipment.status);
     }
   }, [shipment]);
 
+  // Calls the parent’s onUpdateStatus function with the current shipment ID and the selected status.
   const handleUpdate = () => {
     if (shipment) {
       onUpdateStatus(shipment.id, status);
     }
   };
 
+  // If no shipment is selected, nothing is rendered.
   if (!shipment) return null;
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box sx={style}>
+      <Box className={styles.style}>
         <Typography variant="h6" gutterBottom>Update Shipment Status</Typography>
         <FormControl fullWidth>
           <InputLabel>Status</InputLabel>

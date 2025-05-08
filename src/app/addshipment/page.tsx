@@ -10,16 +10,21 @@ import { useRouter } from "next/navigation";
 import AddShipmentForm from "./addshipment";
 
 export default function AddShipmentPage() {
+  // holds the list of available carriers for the dropdown (e.g., FedEx, UPS, DHL)
   const [carriers, setCarriers] = useState<Carrier[]>([]);
+  // allows navigation
   const router = useRouter();
 
+  // On open fetches carriers from backend
   useEffect(() => {
     axios.get('/api/carriers').then((res) => setCarriers(res.data));
   }, []);
 
+  // 
   const handleSubmit = async (shipment: any) => {
     console.log(shipment);
     await axios.post('/api/shipments', shipment);
+    // navigates back to dashboard page
     router.push('/dashboard');
   };
 
@@ -37,6 +42,7 @@ export default function AddShipmentPage() {
       </a>
       <Container>
         <Typography color="black" variant="h4" gutterBottom>Add Shipment</Typography>
+        {/*Passes list of carriers and function to handle submission*/}
         <AddShipmentForm carriers={carriers} onSubmit={handleSubmit} />
       </Container>
       <Link href="/dashboard"><Button color="success" type="button" variant="contained">Dashboard</Button></Link>
