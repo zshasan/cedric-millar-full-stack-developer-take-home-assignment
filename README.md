@@ -5,12 +5,12 @@ Built a simplified Shipment Tracker application with the following capabilities:
 - A back-end API built using ASP.NET Core Web API, following Clean architecture with Domain-Driven Design and using Entity Framework Core.
 
 ## Tech Stack
-- Next.js (TypeScript is preferred)
+- Next.js (TypeScript)
 - React
 - Material UI
-- Axios or SWR
+- Axios
 - ASP.NET Core Web API (.NET 8/9)
-- Entity Framework Core (In-memory or SQLite)
+- Entity Framework Core (In-memory)
 - Logging
 - Swagger
 
