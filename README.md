@@ -1,19 +1,18 @@
 This is a Full-Stack project (Frontend: [Next.js](https://nextjs.org) and Backend: ASP.NET Core) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) and `dotnet new webapi -n ShipmentApi`.
 
 Built a simplified Shipment Tracker application with the following capabilities:
-• A front-end web dashboard built using Next.js, React, and Material UI.
-• A back-end API built using ASP.NET Core Web API, following Clean architecture with
-Domain-Driven Design and using Entity Framework Core.
+- A front-end web dashboard built using Next.js, React, and Material UI.
+- A back-end API built using ASP.NET Core Web API, following Clean architecture with Domain-Driven Design and using Entity Framework Core.
 
 ## Tech Stack
-• Next.js (TypeScript is preferred)
-• React
-• Material UI
-• Axios or SWR
-• ASP.NET Core Web API (.NET 8/9)
-• Entity Framework Core (In-memory or SQLite)
-• Logging
-• Swagger
+- Next.js (TypeScript is preferred)
+- React
+- Material UI
+- Axios or SWR
+- ASP.NET Core Web API (.NET 8/9)
+- Entity Framework Core (In-memory or SQLite)
+- Logging
+- Swagger
 
 ## Getting Started
 
